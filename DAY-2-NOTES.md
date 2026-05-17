@@ -17,7 +17,7 @@
 - A constructor in the class to initialize properties when creating an instance
 
 ## What I struggled with:
-- Why the generic function did not throw an error when I pushed a string into the `numArray` which was supposed to be an array of numbers. I need to investigate this further to understand how TypeScript handles type safety in this case.
+- ~~Why the generic function did not throw an error~~ **SOLVED!** The function was returning `any[]` instead of `T[]`. I fixed by adding explicit return type `: T[]` to the function signature.
 - Exactly how to use interfaces and classes together effectively, and when to choose one over the other in different scenarios.
 
 ## Tomorrow I'll learn:
