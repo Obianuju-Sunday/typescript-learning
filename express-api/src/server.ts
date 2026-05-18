@@ -27,7 +27,6 @@ app.get("/users", (req: Request, res: Response) => {
 // get one user by id
 app.get("/users/:id", (req: Request, res: Response) => {
   const id = Number(req.params.id);
-// const foundUser = users.find(id); This is what i wrote initially until i googled how to use the find method on google, but then i have not understand it yet
   const foundUser = users.find(u => u.id === id);
   if (foundUser) {
     res.status(200).json({
