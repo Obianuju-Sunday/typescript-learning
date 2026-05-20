@@ -1,6 +1,12 @@
 import { Request, Response } from "express";
 import { StudentProfile, OrganisationProfile, User } from "../types/types";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+const JWT_SECRET = process.env.JWT_SECRET;
+if(!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined in the environment variables.");
+}
 // Mock data for all users (both students and organisations)
 let users: User[] = [
   {
@@ -130,14 +136,18 @@ const registerStudent = async (req: Request, res: Response) => {
     location,
   } = req.body;
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   const newUser: User = {
     id: users.length + 1,
     email,
-    password,
+    password: hashedPassword,
     role: "student",
     approved: false,
     createdAt: new Date(),
   };
+
+  // console.log("New student user is registered:", newUser);
 
   users.push(newUser);
 
@@ -163,10 +173,12 @@ const registerStudent = async (req: Request, res: Response) => {
 const registerOrganisation = async (req: Request, res: Response) => {
   const { email, password, companyName, industry, location } = req.body;
 
+  const hashedPassword = await bcrypt.hash(password, 10);
+
   const newUser: User = {
     id: users.length + 1,
     email,
-    password,
+    password: hashedPassword,
     role: "organisation",
     approved: false,
     createdAt: new Date(),
@@ -200,7 +212,7 @@ const login = async (req: Request, res: Response) => {
     });
   }
 
-  const user = users.find((u) => u.email === email && u.password === password);
+  const user = users.find((u) => u.email === email);
 
   if (!user) {
     return res.status(401).json({
@@ -208,15 +220,36 @@ const login = async (req: Request, res: Response) => {
     });
   }
 
+  const checkPassword = await bcrypt.compare(password, user.password);
+
+  if (!checkPassword) {
+    return res.status(401).json({
+      error: "Invalid credentials.",
+    });
+  }
+
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      role: user.role
+    },
+    JWT_SECRET,
+    {
+      expiresIn: "24h"
+    }
+  )
+
   const result = {
     id: user.id,
     email: user.email,
     role: user.role,
-    approved: user.approved,
+    approved: user.approved
   };
 
   return res.status(200).json({
     message: "Login successful!",
+    token,
     user: result,
   });
 };
