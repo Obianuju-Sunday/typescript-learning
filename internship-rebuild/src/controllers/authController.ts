@@ -8,123 +8,12 @@ if(!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in the environment variables.");
 }
 
-// Mock data for all users (both students and organisations)
-let users: User[] = [
-  {
-    id: 1,
-    email: "amina@student.com",
-    password: "student123",
-    role: "student",
-    approved: false,
-    createdAt: new Date(),
-  },
-  {
-    id: 2,
-    email: "chinedu@student.com",
-    password: "student123",
-    role: "student",
-    approved: false,
-    createdAt: new Date(),
-  },
-  {
-    id: 3,
-    email: "techsolutions@organisation.com",
-    password: "organisation123",
-    role: "organisation",
-    approved: false,
-    createdAt: new Date(),
-  },
-  {
-    id: 4,
-    email: "greenenergy@organisation.com",
-    password: "organisation123",
-    role: "organisation",
-    approved: false,
-    createdAt: new Date(),
-  },
-  {
-    id: 5,
-    email: "tech@technova.com",
-    password: "organisation123",
-    role: "organisation",
-    approved: false,
-    createdAt: new Date(),
-  },
-  {
-    id: 6,
-    email: "hr@brightfuture.com",
-    password: "organisation123",
-    role: "organisation",
-    approved: false,
-    createdAt: new Date(),
-  },
-];
+// Mock data storage
+let users: User[] = [];
 
-// Student mock data
-let studentProfiles: StudentProfile[] = [
-  {
-    id: 1,
-    userId: 1,
-    fullName: "Amina Yusuf",
-    email: "amina@student.com",
-    program: "Information Technology",
-    yearOfStudy: 4,
-    university: "Abia State University",
-    location: "Aba",
-    createdAt: new Date(),
-  },
-  {
-    id: 2,
-    userId: 2,
-    fullName: "Chinedu Okafor",
-    email: "chinedu@student.com",
-    program: "Computer Science",
-    yearOfStudy: 3,
-    university: "UNN",
-    location: "Nsukka",
-    createdAt: new Date(),
-  },
-];
+let studentProfiles: StudentProfile[] = [];
 
-// Organisation mock data
-let organisationProfiles: OrganisationProfile[] = [
-  {
-    id: 1,
-    userId: 3,
-    companyName: "Tech Solutions Ltd",
-    email: "techsolutions@organisation.com",
-    industry: "Technology",
-    location: "Lagos",
-    createdAt: new Date(),
-  },
-  {
-    id: 2,
-    userId: 4,
-    companyName: "Green Energy Inc",
-    email: "greenenergy@organisation.com",
-    industry: "Renewable Energy",
-    location: "Abuja",
-    createdAt: new Date(),
-  },
-  {
-    id: 3,
-    userId: 5,
-    companyName: "TechNova Solutions",
-    email: "tech@technova.com",
-    industry: "Technology",
-    location: "Lagos",
-    createdAt: new Date(),
-  },
-  {
-    id: 4,
-    userId: 6,
-    companyName: "Bright Future Labs",
-    email: "hr@brightfuture.com",
-    industry: "Technology",
-    location: "Lagos",
-    createdAt: new Date(),
-  },
-];
+let organisationProfiles: OrganisationProfile[] = [];
 
 const registerStudent = async (req: Request, res: Response) => {
   const {
@@ -255,4 +144,8 @@ const login = async (req: Request, res: Response) => {
   });
 };
 
-export { registerStudent, registerOrganisation, login };
+const allUsers = (req: Request, res: Response) => {
+  return res.status(200).json(users);
+};
+
+export { registerStudent, registerOrganisation, login, allUsers };
