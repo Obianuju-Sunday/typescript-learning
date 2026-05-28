@@ -2,18 +2,12 @@ import { Request, Response } from "express";
 import { StudentProfile, OrganisationProfile, User } from "../types/types";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { organisationProfiles, users, studentProfiles } from '../mockData';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if(!JWT_SECRET) {
   throw new Error("JWT_SECRET is not defined in the environment variables.");
 }
-
-// Mock data storage
-let users: User[] = [];
-
-let studentProfiles: StudentProfile[] = [];
-
-let organisationProfiles: OrganisationProfile[] = [];
 
 const registerStudent = async (req: Request, res: Response) => {
   const {
@@ -36,8 +30,6 @@ const registerStudent = async (req: Request, res: Response) => {
     approved: false,
     createdAt: new Date(),
   };
-
-  // console.log("New student user is registered:", newUser);
 
   users.push(newUser);
 
@@ -148,4 +140,5 @@ const allUsers = (req: Request, res: Response) => {
   return res.status(200).json(users);
 };
 
-export { registerStudent, registerOrganisation, login, allUsers };
+
+export { registerStudent, registerOrganisation, login, allUsers, organisationProfiles };
