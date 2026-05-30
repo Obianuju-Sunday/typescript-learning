@@ -113,7 +113,7 @@ const updateInternship = (req: Request, res: Response) => {
     location,
     otherInfo,
     isActive: internship!.isActive,
-    createdAt: internship!.createdAt
+    createdAt: internship!.createdAt,
   };
 
   const index = internships.findIndex((i) => i.id === id);
@@ -121,7 +121,7 @@ const updateInternship = (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: "Internship updated successfully",
-    updatedInternship
+    updatedInternship,
   });
 };
 
@@ -130,21 +130,23 @@ const deleteInternship = (req: Request, res: Response) => {
 
   const index = internships.findIndex((i) => i.id === id);
 
-    if (index === -1) {
+  if (index === -1) {
     return res.status(404).json({
       error: "Internship not found",
     });
   }
 
-  internships.splice(index, 1)
-  // internships[index]!.isActive = false;
+  internships.splice(index, 1);
 
   return res.status(200).json({
-    message: "Internship deleted successfully"
+    message: "Internship deleted successfully",
   });
-}
+};
 
-export { createInternship, getAllInternships, getInternshipById, updateInternship, deleteInternship };
-
-// id: id,
-// organisationId: orgId,
+export {
+  createInternship,
+  getAllInternships,
+  getInternshipById,
+  updateInternship,
+  deleteInternship,
+};
