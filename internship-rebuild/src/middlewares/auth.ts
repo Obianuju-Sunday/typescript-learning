@@ -26,7 +26,7 @@ const checkToken = (req: Request, res: Response, next: NextFunction) => {
     const decoded = jwt.verify(token, JWT_SECRET);
 
     req.user = decoded as {
-        userId: number,
+        id: number,
         email: string,
         role: string
     };

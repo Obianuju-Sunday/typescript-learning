@@ -4,8 +4,8 @@ import { checkToken, isOrganisation } from "../middlewares/auth";
 
 const router = Router();
 
-router.post('/internships', checkToken, isOrganisation, createInternship);
-router.get('/internships', getAllInternships)
+router.post('/', checkToken, isOrganisation, createInternship);
+router.get('/', getAllInternships)
 
 
 export default router;

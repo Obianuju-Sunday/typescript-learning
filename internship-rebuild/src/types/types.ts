@@ -8,7 +8,7 @@ export interface User {
 }
 
 export interface StudentProfile {
-    id: number;
+    studentId: number;
     userId: number;
     fullName: string;
     email: string;
@@ -23,7 +23,7 @@ export interface StudentProfile {
 }
 
 export interface OrganisationProfile {
-    id: number;
+    organisationId: number;
     userId: number;
     companyName: string;
     email: string;
@@ -51,7 +51,7 @@ export interface StudentSkill {
 
 export interface Internship {
     id: number;
-    orgId: number;
+    organisationId: number;
     title: string;
     description: string;
     requirements?: string;

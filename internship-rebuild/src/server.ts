@@ -6,6 +6,8 @@ const app = express();
 
 // Middleware to parse JSON bodies 
 app.use(express.json());
+
+// Routes
 app.use("/auth", authRoutes);
 app.use("/internships", internshipRoutes);
 
