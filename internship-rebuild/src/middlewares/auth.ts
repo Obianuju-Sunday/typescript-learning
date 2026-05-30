@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from "express";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-  throw new Error("JWT secret key is not defines in env");
+  throw new Error("JWT secret key is not defined in env");
 }
 
 const checkToken = (req: Request, res: Response, next: NextFunction) => {

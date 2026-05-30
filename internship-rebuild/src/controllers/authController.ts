@@ -35,7 +35,7 @@ const registerStudent = async (req: Request, res: Response) => {
 
   const newStudentProfile: StudentProfile = {
     studentId: studentProfiles.length + 1,
-    userId: newUser.id,
+    id: newUser.id,
     fullName,
     email,
     program,
@@ -70,7 +70,7 @@ const registerOrganisation = async (req: Request, res: Response) => {
 
   const newOrganisationProfile: OrganisationProfile = {
     organisationId: organisationProfiles.length + 1,
-    userId: newUser.id,
+    id: newUser.id,
     companyName,
     email,
     industry,

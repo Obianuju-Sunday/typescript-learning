@@ -9,7 +9,7 @@ export interface User {
 
 export interface StudentProfile {
     studentId: number;
-    userId: number;
+    id: number;
     fullName: string;
     email: string;
     program: string;
@@ -24,7 +24,7 @@ export interface StudentProfile {
 
 export interface OrganisationProfile {
     organisationId: number;
-    userId: number;
+    id: number;
     companyName: string;
     email: string;
     industry: string;
