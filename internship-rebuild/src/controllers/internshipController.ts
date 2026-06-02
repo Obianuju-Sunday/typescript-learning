@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Internship } from "../types/types";
-import { organisationProfiles, internships } from "../mockData";
+import { Internship, Application } from "../types/types";
+import { organisationProfiles, internships, applications } from "../mockData";
 
 const createInternship = (req: Request, res: Response) => {
   const {
@@ -143,10 +143,46 @@ const deleteInternship = (req: Request, res: Response) => {
   });
 };
 
+const applyToInternship = (req: Request, res: Response) => {
+  const internshipId = Number(req.params.id);
+  const studentId = req.user!.id;
+  const {coverLetter} = req.body;
+
+  const internship = internships.find((i) => i.id === internshipId);
+
+  if(!internship) {
+    return res.status(404).json({
+      error: "Internship not found."
+    })
+  }
+
+  if(!coverLetter) {
+    return res.status(400).json({
+      error: "Missing required fields."
+    })
+  }
+
+  const newApplication: Application = {
+    id: applications.length + 1,
+    internshipId,
+    studentId,
+    status: "pending",
+    coverLetter,
+    appliedAt: new Date(),
+  }
+
+  applications.push(newApplication);
+
+  return res.status(201).json({
+    message: "Application submitted successfully."
+  })
+}
+
 export {
   createInternship,
   getAllInternships,
   getInternshipById,
   updateInternship,
   deleteInternship,
+  applyToInternship
 };

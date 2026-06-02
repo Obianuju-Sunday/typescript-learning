@@ -68,7 +68,7 @@ export interface Application {
     internshipId: number;
     studentId: number;
     status: 'pending' | 'accepted' | 'rejected';
-    coverLetter?: string;
+    coverLetter: string;
     appliedAt: Date;
 }
 
