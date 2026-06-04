@@ -1,6 +1,11 @@
 import { Request, Response } from "express";
 import { Internship, Application } from "../types/types";
-import { organisationProfiles, internships, applications } from "../mockData";
+import {
+  organisationProfiles,
+  internships,
+  applications,
+  studentProfiles,
+} from "../mockData";
 
 const createInternship = (req: Request, res: Response) => {
   const {
@@ -43,7 +48,7 @@ const getAllInternships = (req: Request, res: Response) => {
 
   const result = activeInternships.map((internship) => {
     const org = organisationProfiles.find(
-      (org) => org.organisationId === internship.organisationId,
+      (org) => org.id === internship.organisationId,
     );
 
     return {
@@ -145,38 +150,70 @@ const deleteInternship = (req: Request, res: Response) => {
 
 const applyToInternship = (req: Request, res: Response) => {
   const internshipId = Number(req.params.id);
-  const studentId = req.user!.id;
-  const {coverLetter} = req.body;
+  const userId = req.user!.id;
+  const { coverLetter } = req.body;
+
+  
+  const studentProfile = studentProfiles.find((s) => s.id === userId);
+
+  if (!studentProfile) {
+    return res.status(404).json({
+      error: "Student profile not found.",
+    });
+  }
 
   const internship = internships.find((i) => i.id === internshipId);
 
-  if(!internship) {
+  if (!internship) {
     return res.status(404).json({
-      error: "Internship not found."
-    })
+      error: "Internship not found.",
+    });
   }
 
-  if(!coverLetter) {
+  if (!coverLetter) {
     return res.status(400).json({
-      error: "Missing required fields."
-    })
+      error: "Cover letter is required.",
+    });
   }
 
   const newApplication: Application = {
     id: applications.length + 1,
     internshipId,
-    studentId,
+    studentId: studentProfile.id,
     status: "pending",
     coverLetter,
     appliedAt: new Date(),
-  }
+  };
 
   applications.push(newApplication);
 
   return res.status(201).json({
-    message: "Application submitted successfully."
-  })
-}
+    message: "Application submitted successfully.",
+  });
+};
+
+const getApplicationsForInternships = (req: Request, res: Response) => {
+  const orgId = req.user!.id;
+
+  const orgInternships = internships.filter((i) => i.organisationId === orgId);
+  const orgApplications = applications.filter((app) => {
+    return orgInternships.find((i) => i.id === app.internshipId);
+  });
+
+  const result = orgApplications.map((app) => {
+    const student = studentProfiles.find((s) => s.id === app.studentId);
+    return {
+      ...app,
+      studentName: student?.fullName,
+      studentEmail: student?.email,
+    };
+  });
+
+  return res.status(200).json({
+    message: "Applications fetched successfully",
+    result,
+  });
+};
 
 export {
   createInternship,
@@ -184,5 +221,6 @@ export {
   getInternshipById,
   updateInternship,
   deleteInternship,
-  applyToInternship
+  applyToInternship,
+  getApplicationsForInternships
 };
