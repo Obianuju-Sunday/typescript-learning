@@ -215,6 +215,37 @@ const getApplicationsForInternships = (req: Request, res: Response) => {
   });
 };
 
+const updateApplicationStatus = (req: Request, res: Response) =>{
+  const applicationID = Number(req.params.id); 
+  const {status} = req.body;
+
+  // Step 1: 
+  if(!["pending", "accepted", "rejected"].includes(status)){
+    return res.status(400).json({
+      error: "Invalid status value. Allowed values are 'pending', 'accepted', 'rejected'."
+    })
+  }
+
+  // Step 2
+  const application = applications.find((app) => app.id === applicationID);
+
+  // Step 3
+  if(!application){
+    return res.status(404).json({
+      error: "Application not found."
+    })
+  }
+
+  // Step 4
+  application.status = status;
+
+  // Step five
+  return res.status(200).json({
+    message: "Status updated successfully.",
+    ...application
+  })
+}
+
 export {
   createInternship,
   getAllInternships,
@@ -222,5 +253,6 @@ export {
   updateInternship,
   deleteInternship,
   applyToInternship,
-  getApplicationsForInternships
+  getApplicationsForInternships,
+  updateApplicationStatus
 };
