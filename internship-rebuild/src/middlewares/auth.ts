@@ -18,17 +18,17 @@ const checkToken = (req: Request, res: Response, next: NextFunction) => {
   const token = authHeader.split(" ")[1];
 
   if (!token) {
-  return res.status(401).json({
-    error: "Access denied. No token provided.",
-  });
-}
+    return res.status(401).json({
+      error: "Access denied. No token provided.",
+    });
+  }
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
 
     req.user = decoded as {
-        id: number,
-        email: string,
-        role: string
+      id: number;
+      email: string;
+      role: string;
     };
     next();
   } catch (err) {
@@ -39,44 +39,39 @@ const checkToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const isOrganisation = (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
-
-    if (!user) {
-        return res.status(401).json({
-            error: "Unauthorized. No user information found."
-        });
-    }
-
-    if (user.role !== "organisation") {
-        return res.status(403).json({
-            error: "Forbidden. You do not have access to this resource."
-        });
-    }
-
-    next();
-}
-
-const isStudent = (req: Request, res: Response, next: NextFunction) => {
   const user = req.user;
 
-  if(!user){
+  if (!user) {
     return res.status(401).json({
-      error: "Unauthorized. No user information found."
+      error: "Unauthorized. No user information found.",
     });
   }
 
-  if(user.role !== "student"){
+  if (user.role !== "organisation") {
     return res.status(403).json({
-      error: "Forbidden. You do not have access to this resource."
+      error: "Forbidden. You do not have access to this resource.",
     });
   }
 
   next();
-}
-
-export {
-    checkToken,
-    isOrganisation,
-    isStudent
 };
 
+const isStudent = (req: Request, res: Response, next: NextFunction) => {
+  const user = req.user;
+
+  if (!user) {
+    return res.status(401).json({
+      error: "Unauthorized. No user information found.",
+    });
+  }
+
+  if (user.role !== "student") {
+    return res.status(403).json({
+      error: "Forbidden. You do not have access to this resource.",
+    });
+  }
+
+  next();
+};
+
+export { checkToken, isOrganisation, isStudent };
